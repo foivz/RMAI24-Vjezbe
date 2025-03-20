@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">RMAI24-Vjezbe</string>
+    <string name="app_name">Memento</string>
+
+    <string name="tasks_pending">Pending</string>
+    <string name="tasks_completed">Completed</string>
+    <string name="news">News</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
