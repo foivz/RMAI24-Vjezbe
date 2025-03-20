@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import hr.foi.rmai.memento.adapters.MainPagerAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,14 @@ class MainActivity : AppCompatActivity() {
 
         tabLayout = findViewById(R.id.tabs)
         viewPager = findViewById(R.id.viewPager)
-        viewPager.adapter = MainPagerAdapter(supportFragmentManager, lifecycle)
+
+        val viewPagerAdapter = MainPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.setIcon(viewPagerAdapter.iconList[position])
+            tab.setText(viewPagerAdapter.titleList[position])
+        }.attach()
     }
 
     private fun setupQualityOfLifeImprovements() {
