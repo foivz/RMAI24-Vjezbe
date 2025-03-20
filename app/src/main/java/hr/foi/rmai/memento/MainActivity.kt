@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setIcon(viewPagerAdapter.iconList[position])
-            tab.setText(viewPagerAdapter.titleList[position])
+            tab.setIcon(viewPagerAdapter.fragmentItems[position].iconRes)
+            tab.setText(viewPagerAdapter.fragmentItems[position].titleRes)
         }.attach()
     }
 
