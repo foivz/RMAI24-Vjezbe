@@ -17,17 +17,20 @@ class TasksAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<Task
     inner class TaskViewHolder(view: View): RecyclerView.ViewHolder(view) {
         private val tvTaskName: TextView
         private val tvDueDate: TextView
+        private val svTaskCourse: SurfaceView
 
         private val sdf: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm")
 
         init {
             tvTaskName = view.findViewById(R.id.tv_task_name)
             tvDueDate = view.findViewById(R.id.tv_due_date)
+            svTaskCourse = view.findViewById(R.id.sv_task_course)
         }
 
         fun bind(task: Task) {
             tvTaskName.text = task.name
             tvDueDate.text = sdf.format(task.dueDate)
+            svTaskCourse.setBackgroundColor(task.course.color.toColorInt())
         }
     }
 
