@@ -22,10 +22,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
+        setupTabNavigation()
+    }
+
+    private fun setupTabNavigation() {
         tabLayout = findViewById(R.id.tabs)
         viewPager = findViewById(R.id.viewPager)
 
         val viewPagerAdapter = MainPagerAdapter(supportFragmentManager, lifecycle)
+        fillAdapterWithFragments(viewPagerAdapter)
+
+        viewPager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.setIcon(viewPagerAdapter.fragmentItems[position].iconRes)
+            tab.setText(viewPagerAdapter.fragmentItems[position].titleRes)
+        }.attach()
+    }
+
+    private fun fillAdapterWithFragments(viewPagerAdapter: MainPagerAdapter) {
         viewPagerAdapter.addFragment(
             MainPagerAdapter.FragmentItem(
                 R.string.tasks_pending,
@@ -47,13 +62,6 @@ class MainActivity : AppCompatActivity() {
                 NewsFragment::class
             )
         )
-
-        viewPager.adapter = viewPagerAdapter
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setIcon(viewPagerAdapter.fragmentItems[position].iconRes)
-            tab.setText(viewPagerAdapter.fragmentItems[position].titleRes)
-        }.attach()
     }
 
     private fun setupQualityOfLifeImprovements() {
