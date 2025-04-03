@@ -4,7 +4,10 @@
     <string name="tasks_pending">Pending</string>
     <string name="tasks_completed">Completed</string>
     <string name="news">News</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pending_task_list">Pending task list</string>
+
+    <string name="task_name">Task name</string>
+    <string name="course">Course</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>
