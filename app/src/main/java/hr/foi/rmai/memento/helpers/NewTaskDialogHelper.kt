@@ -63,6 +63,11 @@ class NewTaskDialogHelper(private val view: View) {
     }
 
     fun buildTask(): Task {
-        TODO()
+        val etName = view.findViewById<EditText>(R.id.et_new_task_dialog_name)
+        val newTaskName = etName.text.toString()
+        val spinnerCourse = view.findViewById<Spinner>(R.id.spn_new_task_dialog_course)
+        val selectedCourse = spinnerCourse.selectedItem as TaskCourse
+
+        return Task(newTaskName, selectedDateTime.time, selectedCourse, false)
     }
 }

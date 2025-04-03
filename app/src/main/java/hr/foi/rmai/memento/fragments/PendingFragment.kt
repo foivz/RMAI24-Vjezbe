@@ -48,6 +48,9 @@ class PendingFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setView(newTaskDialogView)
             .setTitle(getString(R.string.create_a_new_task))
+            .setPositiveButton(getString(R.string.create_a_new_task)) { _, _ ->
+                val newTask = dialogHelper.buildTask()
+            }
             .show()
 
         dialogHelper.populateSpinner(MockDataLoader.getMockCourses())
