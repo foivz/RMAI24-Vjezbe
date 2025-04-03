@@ -14,6 +14,7 @@ import hr.foi.rmai.memento.adapters.MainPagerAdapter
 import hr.foi.rmai.memento.fragments.CompletedFragment
 import hr.foi.rmai.memento.fragments.NewsFragment
 import hr.foi.rmai.memento.fragments.PendingFragment
+import androidx.core.view.get
 
 class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
@@ -27,21 +28,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
-        setupTabNavigation()
-
         navDrawerLayout = findViewById(R.id.nav_drawer_layout)
         navView = findViewById(R.id.nav_view)
 
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.title) {
-                getString(R.string.tasks_pending) -> viewPager.setCurrentItem(0, true)
-                getString(R.string.tasks_completed) -> viewPager.setCurrentItem(1, true)
-                getString(R.string.news) -> viewPager.setCurrentItem(2, true)
-            }
-            
-            navDrawerLayout.closeDrawers()
-            return@setNavigationItemSelectedListener true
-        }
+        setupTabNavigation()
     }
 
     private fun setupTabNavigation() {
@@ -57,6 +47,25 @@ class MainActivity : AppCompatActivity() {
             tab.setIcon(viewPagerAdapter.fragmentItems[position].iconRes)
             tab.setText(viewPagerAdapter.fragmentItems[position].titleRes)
         }.attach()
+
+        viewPagerAdapter.fragmentItems.withIndex().forEach { (index, fragmentItem) ->
+            navView.menu
+                .add(fragmentItem.titleRes)
+                .setIcon(fragmentItem.iconRes)
+                .setCheckable(true)
+                .setChecked((index == 0))
+                .setOnMenuItemClickListener {
+                    viewPager.setCurrentItem(index, true)
+                    navDrawerLayout.closeDrawers()
+                    return@setOnMenuItemClickListener true
+                }
+        }
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                navView.menu[position].isChecked = true
+            }
+        })
     }
 
     private fun fillAdapterWithFragments(viewPagerAdapter: MainPagerAdapter) {
