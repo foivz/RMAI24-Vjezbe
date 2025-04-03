@@ -5,7 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.foi.rmai.memento.adapters.MainPagerAdapter
@@ -17,12 +19,29 @@ class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager2
 
+    lateinit var navDrawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
         setupTabNavigation()
+
+        navDrawerLayout = findViewById(R.id.nav_drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.title) {
+                getString(R.string.tasks_pending) -> viewPager.setCurrentItem(0, true)
+                getString(R.string.tasks_completed) -> viewPager.setCurrentItem(1, true)
+                getString(R.string.news) -> viewPager.setCurrentItem(2, true)
+            }
+            
+            navDrawerLayout.closeDrawers()
+            return@setNavigationItemSelectedListener true
+        }
     }
 
     private fun setupTabNavigation() {
