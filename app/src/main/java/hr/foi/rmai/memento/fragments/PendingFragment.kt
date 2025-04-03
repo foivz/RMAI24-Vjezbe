@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import hr.foi.rmai.memento.R
 import hr.foi.rmai.memento.adapters.TasksAdapter
 import hr.foi.rmai.memento.helpers.MockDataLoader
@@ -14,7 +15,8 @@ import hr.foi.rmai.memento.helpers.MockDataLoader
 class PendingFragment : Fragment() {
     private val mockData = MockDataLoader.getMockData()
 
-    private lateinit var recylerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var btnCreateTask: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,8 +26,13 @@ class PendingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recylerView = view.findViewById(R.id.rv_pending_tasks)
-        recylerView.adapter = TasksAdapter(mockData)
-        recylerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView = view.findViewById(R.id.rv_pending_tasks)
+        recyclerView.adapter = TasksAdapter(mockData)
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        btnCreateTask = view.findViewById(R.id.fab_pending_fragment_create_task)
+        btnCreateTask.setOnClickListener {
+
+        }
     }
 }
