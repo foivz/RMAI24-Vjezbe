@@ -1,7 +1,5 @@
 package hr.foi.rmai.memento.adapters
 
-package hr.foi.rmai.memento.adapters
-
 import android.view.LayoutInflater
 import android.view.SurfaceView
 import android.view.View
