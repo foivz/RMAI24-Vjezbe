@@ -49,5 +49,8 @@ class PendingFragment : Fragment() {
             .setView(newTaskDialogView)
             .setTitle(getString(R.string.create_a_new_task))
             .show()
+
+        dialogHelper.populateSpinner(MockDataLoader.getMockCourses())
+        dialogHelper.activateDateTimeListeners()
     }
 }
