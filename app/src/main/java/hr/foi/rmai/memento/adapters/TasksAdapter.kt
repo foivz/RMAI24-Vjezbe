@@ -13,7 +13,7 @@ import hr.foi.rmai.memento.R
 import hr.foi.rmai.memento.entities.Task
 import java.text.SimpleDateFormat
 
-class TasksAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TasksAdapter.TaskViewHolder>() {
+class TasksAdapter(private val taskList: MutableList<Task>) : RecyclerView.Adapter<TasksAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(view: View): RecyclerView.ViewHolder(view) {
         private val tvTaskName: TextView
         private val tvDueDate: TextView
@@ -40,6 +40,17 @@ class TasksAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<Task
             .inflate(R.layout.task_list_item, parent, false)
 
         return TaskViewHolder(taskView)
+    }
+
+    fun addTask(newTask: Task) {
+        var newIndexInList = taskList.indexOfFirst { task ->
+            task.dueDate > newTask.dueDate
+        }
+        if (newIndexInList == -1) {
+            newIndexInList = taskList.size
+        }
+        taskList.add(newIndexInList, newTask)
+        notifyItemInserted(newIndexInList)
     }
 
     override fun getItemCount(): Int = taskList.size

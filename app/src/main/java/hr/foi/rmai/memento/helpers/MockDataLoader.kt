@@ -5,10 +5,10 @@ import hr.foi.rmai.memento.entities.TaskCourse
 import java.util.Date
 
 object MockDataLoader {
-    fun getMockData(): List<Task> {
+    fun getMockData(): MutableList<Task> {
         val courses = getMockCourses()
 
-        return listOf(
+        return mutableListOf(
             Task("Submit seminar paper", Date(), courses[0], false),
             Task("Prepare for exercises", Date(), courses[1], false),
             Task("Rally a project team", Date(), courses[0], false),
