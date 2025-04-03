@@ -5,10 +5,17 @@ import hr.foi.rmai.memento.entities.TaskCourse
 import java.util.Date
 
 object MockDataLoader {
-    fun getMockData(): List<Task> = listOf(
-        Task("Submit seminar paper", Date(), TaskCourse("DP", "#02AB34"), false),
-        Task("Prepare for exercises", Date(), TaskCourse("SIS", "#ABCDEF"), false),
-        Task("Rally a project team", Date(), TaskCourse("RMAI", "#12AD89"), false),
-        Task("Work on 1st homework", Date(), TaskCourse("OS", "#56AC45"), false)
-    )
+    fun getMockData(): List<Task> {
+        val courses = getMockCourses()
+
+        return listOf(
+            Task("Submit seminar paper", Date(), courses[0], false),
+            Task("Prepare for exercises", Date(), courses[1], false),
+            Task("Rally a project team", Date(), courses[0], false),
+            Task("Work on 1st homework", Date(), courses[2], false))
+    }
+
+    fun getMockCourses(): List<TaskCourse> = listOf(
+        TaskCourse("RMAI", "#02AB34"), TaskCourse("OS", "#56AC45"),
+        TaskCourse("EP", "#ABCDEF"), TaskCourse("RWA", "#12AD89"))
 }
