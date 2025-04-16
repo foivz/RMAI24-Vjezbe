@@ -15,6 +15,8 @@ import hr.foi.rmai.memento.fragments.CompletedFragment
 import hr.foi.rmai.memento.fragments.NewsFragment
 import hr.foi.rmai.memento.fragments.PendingFragment
 import androidx.core.view.get
+import hr.foi.rmai.memento.database.TasksDatabase
+import hr.foi.rmai.memento.helpers.MockDataLoader
 
 class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         navView = findViewById(R.id.nav_view)
 
         setupTabNavigation()
+        TasksDatabase.buildInstance(this)
+        MockDataLoader.loadMockData()
     }
 
     private fun setupTabNavigation() {
