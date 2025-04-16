@@ -1,5 +1,6 @@
 package hr.foi.rmai.memento.adapters
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import hr.foi.rmai.memento.R
 import hr.foi.rmai.memento.ws.NewsItem
+import hr.foi.rmai.memento.ws.WsNews
+import java.net.URL
 
 class NewsAdapter(private val newsList: List<NewsItem>) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -29,6 +32,10 @@ class NewsAdapter(private val newsList: List<NewsItem>) :
             title.text = newsItem.title
             text.text = newsItem.text
             dateTime.text = newsItem.date
+
+            val imageURL = URL(WsNews.BASE_URL + newsItem.imagePath);
+            val imageBitmap = BitmapFactory.decodeStream(imageURL.openStream());
+            imageView.setImageBitmap(imageBitmap);
         }
     }
 
