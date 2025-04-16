@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -45,7 +46,12 @@ class PendingFragment : Fragment() {
 
     private fun loadTaskList() {
         val tasks = tasksDao.getAllTasks(false)
-        recyclerView.adapter = TasksAdapter(tasks.toMutableList())
+        recyclerView.adapter = TasksAdapter(tasks.toMutableList()) { taskId ->
+            parentFragmentManager.setFragmentResult(
+                "task_completed",
+                bundleOf("task_id" to taskId)
+            )
+        }
     }
 
     private fun showDialog() {
@@ -59,8 +65,12 @@ class PendingFragment : Fragment() {
             .setView(newTaskDialogView)
             .setTitle(getString(R.string.create_a_new_task))
             .setPositiveButton(getString(R.string.create_a_new_task)) { _, _ ->
-                val newTask = dialogHelper.buildTask()
+                var newTask = dialogHelper.buildTask()
                 val tasksAdapter = (recyclerView.adapter as TasksAdapter)
+
+                val newTaskId = tasksDao.insertTask(newTask)[0]
+                newTask = tasksDao.getTask(newTaskId.toInt())
+
                 tasksAdapter.addTask(newTask)
             }
             .show()
