@@ -1,5 +1,7 @@
 package hr.foi.rmai.memento
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,12 +32,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
+        setupNotificationChannel()
+
         navDrawerLayout = findViewById(R.id.nav_drawer_layout)
         navView = findViewById(R.id.nav_view)
 
         setupTabNavigation()
         TasksDatabase.buildInstance(this)
         MockDataLoader.loadMockData()
+    }
+
+    private fun setupNotificationChannel() {
+        val channel = NotificationChannel ("task-timer", "Task Timer Channel",
+            NotificationManager.IMPORTANCE_HIGH)
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun setupTabNavigation() {
