@@ -31,4 +31,11 @@ data class Task(
     val course: TaskCourse by lazy {
         TasksDatabase.getInstance().getTaskCoursesDao().getCourseById(courseId)
     }
+
+    fun isOverdue(): Boolean {
+        val dateFromMonthAgo = Calendar.getInstance().apply {
+            add(Calendar.DATE, -30)
+        }.time
+        return dueDate.before(dateFromMonthAgo)
+    }
 }
