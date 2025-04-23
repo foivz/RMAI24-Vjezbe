@@ -26,6 +26,7 @@ import hr.foi.rmai.memento.fragments.CompletedFragment
 import hr.foi.rmai.memento.fragments.NewsFragment
 import hr.foi.rmai.memento.fragments.PendingFragment
 import androidx.core.view.get
+import androidx.preference.PreferenceManager
 import hr.foi.rmai.memento.database.TasksDatabase
 import hr.foi.rmai.memento.helpers.MockDataLoader
 import hr.foi.rmai.memento.helpers.TaskDeletionServiceHelper
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
+        applyUserSettings()
         setupNotificationChannel()
 
         navDrawerLayout = findViewById(R.id.nav_drawer_layout)
@@ -73,6 +75,14 @@ class MainActivity : AppCompatActivity() {
             NotificationManager.IMPORTANCE_HIGH)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun applyUserSettings() {
+        PreferenceManager.getDefaultSharedPreferences(this)?.let { pref ->
+            PreferencesActivity.switchDarkMode(
+                pref.getBoolean("preference_dark_mode", false)
+            )
+        }
     }
 
     private fun setupTabNavigation() {
