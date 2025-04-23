@@ -1,5 +1,6 @@
 package hr.foi.rmai.memento.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -44,6 +45,13 @@ class PendingFragment : Fragment() {
         loadTaskList()
     }
 
+    private fun incrementTasksCreatedCounter() {
+        context?.getSharedPreferences("tasks_preferences", Context.MODE_PRIVATE)?.apply {
+            val currentCount = getInt("tasks_created_counter", 0)
+            edit().putInt("tasks_created_counter", currentCount + 1).apply()
+        }
+    }
+
     private fun loadTaskList() {
         val tasks = tasksDao.getAllTasks(false)
         recyclerView.adapter = TasksAdapter(tasks.toMutableList()) { taskId ->
@@ -72,6 +80,8 @@ class PendingFragment : Fragment() {
                 newTask = tasksDao.getTask(newTaskId.toInt())
 
                 tasksAdapter.addTask(newTask)
+
+                incrementTasksCreatedCounter()
             }
             .show()
 
