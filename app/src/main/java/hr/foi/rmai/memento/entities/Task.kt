@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import hr.foi.rmai.memento.converters.DateConverter
 import hr.foi.rmai.memento.database.TasksDatabase
+import java.util.Calendar
 import java.util.Date
 
 @Entity(tableName = "tasks", foreignKeys = [

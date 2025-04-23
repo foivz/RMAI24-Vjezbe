@@ -38,5 +38,14 @@ class CompletedFragment : Fragment() {
             val tasksAdapter = recyclerView.adapter as TasksAdapter
             tasksAdapter.addTask(tasksDao.getTask(completedTaskId))
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            "task_deleted",
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val deletedTaskId = bundle.getInt("task_id")
+            val tasksAdapter = recyclerView.adapter as TasksAdapter
+            tasksAdapter.removeTaskById(deletedTaskId)
+        }
     }
 }

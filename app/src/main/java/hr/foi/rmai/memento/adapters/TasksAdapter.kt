@@ -115,6 +115,17 @@ class TasksAdapter(private val taskList: MutableList<Task>,
         notifyItemInserted(newIndexInList)
     }
 
+    fun removeTaskById(taskId: Int) {
+        val deletedIndex = taskList.indexOfFirst { task ->
+            task.id == taskId
+        }
+
+        if (deletedIndex != -1) {
+            taskList.removeAt(deletedIndex)
+            notifyItemRemoved(deletedIndex)
+        }
+    }
+
     override fun getItemCount(): Int = taskList.size
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
