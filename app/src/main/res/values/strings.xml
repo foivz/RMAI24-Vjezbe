@@ -1,17 +1,18 @@
 <resources>
     <string name="app_name">Memento</string>
-
     <string name="tasks_pending">Pending</string>
     <string name="tasks_completed">Completed</string>
     <string name="news">News</string>
     <string name="pending_task_list">Pending task list</string>
-
     <string name="task_name">Task name</string>
     <string name="course">Course</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="create_a_new_task">Create a new task</string>
     <string name="news_list_item_image_desc">News list image</string>
+    <string name="delete_task">Delete task</string>
+    <string name="task_mark_as_completed">Mark as completed</string>
+    <string name="cancel">Cancel</string>
     <string name="refresh_news_button_desc">Refresh news</string>
     <string name="news_ws_err_msg">News are currently not available.\nPlease, try again later.</string>
     <string name="task_countdown">Task countdown</string>

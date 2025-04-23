@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getString
 import androidx.core.graphics.toColorInt
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -56,7 +57,7 @@ class TasksAdapter(private val taskList: MutableList<Task>,
 
             view.setOnLongClickListener {
                 AlertDialog.Builder(view.context)
-                    .setPositiveButton("Mark as completed") { _, _ ->
+                    .setPositiveButton(getString(view.context, R.string.task_mark_as_completed)) { _, _ ->
                         val completedTask = taskList[adapterPosition]
                         completedTask.completed = true
 
@@ -68,13 +69,13 @@ class TasksAdapter(private val taskList: MutableList<Task>,
                             onTaskCompleted.invoke(completedTask.id)
                         }
                     }
-                    .setNegativeButton("Delete task") { _, _ ->
+                    .setNegativeButton(getString(view.context, R.string.delete_task)) { _, _ ->
                         val deletedTask = taskList[adapterPosition]
                         TasksDatabase.getInstance().getTasksDao()
                             .removeTask(deletedTask)
                         removeTaskFromList()
                     }
-                    .setNeutralButton("Cancel") { dialog, _ ->
+                    .setNeutralButton(getString(view.context, R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
                     .setTitle(tvTaskName.text)
