@@ -97,11 +97,23 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
+        navView.menu
+            .add(2, 0, 0,
+                "Tasks created: ${getTasksCreatedCount()}")
+            .isEnabled = false
+
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 navView.menu[position].isChecked = true
             }
         })
+    }
+
+    private fun getTasksCreatedCount(): Int {
+        val sharedPreferences = getSharedPreferences(
+            "tasks_preferences", MODE_PRIVATE
+        )
+        return sharedPreferences.getInt("tasks_created_counter", 0)
     }
 
     private fun fillAdapterWithFragments(viewPagerAdapter: MainPagerAdapter) {
