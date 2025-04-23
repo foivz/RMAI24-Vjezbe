@@ -6,8 +6,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var navView: NavigationView
 
     private var taskDeletionServiceHelper = TaskDeletionServiceHelper(this)
+
+    lateinit var onSharedPreferencesListener : OnSharedPreferenceChangeListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,16 +102,38 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        navView.menu
+        val tasksCounterItem = navView.menu
             .add(2, 0, 0,
                 "Tasks created: ${getTasksCreatedCount()}")
-            .isEnabled = false
+            .setEnabled(false)
+
+        attachMenuItemToTasksCreatedCount(tasksCounterItem)
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 navView.menu[position].isChecked = true
             }
         })
+    }
+
+    private fun attachMenuItemToTasksCreatedCount(tasksCounterItem: MenuItem) {
+        val sharedPreferences = getSharedPreferences("tasks_preferences", MODE_PRIVATE)
+
+        onSharedPreferencesListener =
+            OnSharedPreferenceChangeListener { _, key ->
+                if (key == "tasks_created_counter") {
+                    updateTasksCreatedCounter(tasksCounterItem, sharedPreferences)
+                }
+            }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferencesListener)
+        updateTasksCreatedCounter(tasksCounterItem, sharedPreferences)
+    }
+
+    private fun updateTasksCreatedCounter(tasksCounterItem: MenuItem,
+                                          sharedPreferences: SharedPreferences) {
+        val tasksCreated = sharedPreferences.getInt("tasks_created_counter", 0)
+        tasksCounterItem.title = "Tasks created: $tasksCreated"
     }
 
     private fun getTasksCreatedCount(): Int {
