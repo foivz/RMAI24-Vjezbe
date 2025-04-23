@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -31,6 +32,7 @@ import hr.foi.rmai.memento.database.TasksDatabase
 import hr.foi.rmai.memento.helpers.MockDataLoader
 import hr.foi.rmai.memento.helpers.TaskDeletionServiceHelper
 import hr.foi.rmai.memento.services.TaskDeletionService
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
@@ -55,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupQualityOfLifeImprovements()
 
-        applyUserSettings()
         setupNotificationChannel()
 
         navDrawerLayout = findViewById(R.id.nav_drawer_layout)
@@ -84,12 +85,30 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun applyUserSettings() {
-        PreferenceManager.getDefaultSharedPreferences(this)?.let { pref ->
+    private fun applyUserSettings(newContext: Context?) : Context? {
+        if (newContext == null) return newContext
+
+        PreferenceManager.getDefaultSharedPreferences(newContext).let { pref ->
             PreferencesActivity.switchDarkMode(
                 pref.getBoolean("preference_dark_mode", false)
             )
+
+            val lang = pref.getString("preference_language", "EN")
+            if (lang != null) {
+                val locale = Locale(lang)
+                if (newContext.resources.configuration.locales[0].language != locale.language) {
+                    newContext.resources.configuration.setLocale(locale)
+                    Locale.setDefault(locale)
+                    return newContext.createConfigurationContext(newContext.resources.configuration)
+                }
+            }
         }
+
+        return newContext
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(applyUserSettings(newBase))
     }
 
     private fun setupTabNavigation() {
