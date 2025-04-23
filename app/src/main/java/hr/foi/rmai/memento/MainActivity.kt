@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,6 +25,7 @@ import hr.foi.rmai.memento.fragments.PendingFragment
 import androidx.core.view.get
 import hr.foi.rmai.memento.database.TasksDatabase
 import hr.foi.rmai.memento.helpers.MockDataLoader
+import hr.foi.rmai.memento.helpers.TaskDeletionServiceHelper
 import hr.foi.rmai.memento.services.TaskDeletionService
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navDrawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+
+    private var taskDeletionServiceHelper = TaskDeletionServiceHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,17 +55,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun activateTaskDeletionService() {
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, TaskDeletionService::class.java)
-        val pendingIntent = PendingIntent.getService(this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE)
-
-        alarmManager.setRepeating(
-            AlarmManager.ELAPSED_REALTIME,
-            SystemClock.elapsedRealtime() + 15 * 60 * 1000,
-            15 * 60 * 1000,
-            pendingIntent
-        )
+        taskDeletionServiceHelper.activateTaskDeletionService { deletedTaskId ->
+            supportFragmentManager.setFragmentResult(
+                "task_deleted",
+                bundleOf("task_id" to deletedTaskId)
+            )
+        }
     }
 
     private fun setupNotificationChannel() {
@@ -136,5 +135,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    override fun onDestroy() {
+        taskDeletionServiceHelper.deactivateTaskDeletionService()
+        super.onDestroy()
     }
 }
