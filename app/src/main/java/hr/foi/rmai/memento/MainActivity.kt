@@ -1,8 +1,13 @@
 package hr.foi.rmai.memento
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +24,7 @@ import hr.foi.rmai.memento.fragments.PendingFragment
 import androidx.core.view.get
 import hr.foi.rmai.memento.database.TasksDatabase
 import hr.foi.rmai.memento.helpers.MockDataLoader
+import hr.foi.rmai.memento.services.TaskDeletionService
 
 class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
@@ -40,6 +46,22 @@ class MainActivity : AppCompatActivity() {
         setupTabNavigation()
         TasksDatabase.buildInstance(this)
         MockDataLoader.loadMockData()
+
+        activateTaskDeletionService()
+    }
+
+    private fun activateTaskDeletionService() {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, TaskDeletionService::class.java)
+        val pendingIntent = PendingIntent.getService(this, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+        alarmManager.setRepeating(
+            AlarmManager.ELAPSED_REALTIME,
+            SystemClock.elapsedRealtime() + 15 * 60 * 1000,
+            15 * 60 * 1000,
+            pendingIntent
+        )
     }
 
     private fun setupNotificationChannel() {
