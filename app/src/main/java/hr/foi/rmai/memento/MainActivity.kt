@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var onSharedPreferencesListener : OnSharedPreferenceChangeListener
 
+    private val settingsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_LANG_CHANGED) {
+                recreate()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -123,8 +130,8 @@ class MainActivity : AppCompatActivity() {
             .add(3, 0, 0, getString(R.string.settings_menu_item))
             .setIcon(R.drawable.baseline_settings_applications_24)
             .setOnMenuItemClickListener {
-                val intent = Intent(baseContext, PreferencesActivity::class.java)
-                startActivity(intent)
+                settingsLauncher.launch(Intent(this, PreferencesActivity::class.java))
+
                 navDrawerLayout.closeDrawers()
 
                 return@setOnMenuItemClickListener true

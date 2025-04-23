@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
 import hr.foi.rmai.memento.fragments.MementoSettingsFragment
 
+const val RESULT_LANG_CHANGED = AppCompatActivity.RESULT_FIRST_USER
+
 class PreferencesActivity : AppCompatActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +30,13 @@ class PreferencesActivity : AppCompatActivity(),
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
             "preference_dark_mode" -> switchDarkMode(sharedPreferences?.getBoolean(key, false))
-            "preference_language" -> TODO()
+            "preference_language" -> notifyLanguageChangedAndClose()
         }
+    }
+
+    private fun notifyLanguageChangedAndClose() {
+        setResult(RESULT_LANG_CHANGED)
+        finish()
     }
 
     companion object {
