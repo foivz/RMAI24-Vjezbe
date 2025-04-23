@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.preference.PreferenceManager
 import hr.foi.rmai.memento.R
 import hr.foi.rmai.memento.entities.Task
 import hr.foi.rmai.memento.entities.TaskCourse
@@ -62,8 +63,16 @@ class NewTaskDialogHelper(private val view: View) {
         }
     }
 
+    fun setDefaultTaskName() {
+        val etName = view.findViewById<EditText>(R.id.et_new_task_dialog_name)
+
+        val settings = PreferenceManager.getDefaultSharedPreferences(view.context)
+        etName.setText(settings.getString("preference_default_task_name", ""))
+    }
+
     fun buildTask(): Task {
         val etName = view.findViewById<EditText>(R.id.et_new_task_dialog_name)
+
         val newTaskName = etName.text.toString()
         val spinnerCourse = view.findViewById<Spinner>(R.id.spn_new_task_dialog_course)
         val selectedCourse = spinnerCourse.selectedItem as TaskCourse

@@ -87,5 +87,6 @@ class PendingFragment : Fragment() {
 
         dialogHelper.populateSpinner(taskCoursesDao.getAllCourses())
         dialogHelper.activateDateTimeListeners()
+        dialogHelper.setDefaultTaskName()
     }
 }
