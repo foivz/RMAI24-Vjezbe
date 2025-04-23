@@ -109,6 +109,17 @@ class MainActivity : AppCompatActivity() {
 
         attachMenuItemToTasksCreatedCount(tasksCounterItem)
 
+        navView.menu
+            .add(3, 0, 0, getString(R.string.settings_menu_item))
+            .setIcon(R.drawable.baseline_settings_applications_24)
+            .setOnMenuItemClickListener {
+                val intent = Intent(baseContext, PreferencesActivity::class.java)
+                startActivity(intent)
+                navDrawerLayout.closeDrawers()
+
+                return@setOnMenuItemClickListener true
+            }
+
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 navView.menu[position].isChecked = true

@@ -22,4 +22,5 @@
     <string name="preferences_application_language">Jezik aplikacije</string>
     <string name="preferences_template_task_name">Naziv predloška zadatka</string>
     <string name="preferences_default_task_name_summary">Ovaj se tekst automatski unosi prilikom stvaranja novog zadatka.</string>
+    <string name="settings_menu_item">Postavke</string>
 </resources>
