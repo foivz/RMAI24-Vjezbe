@@ -56,4 +56,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.picasso:picasso:2.8")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 }
