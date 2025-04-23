@@ -17,4 +17,8 @@
     <string name="news_ws_err_msg">News are currently not available.\nPlease, try again later.</string>
     <string name="task_countdown">Task countdown</string>
     <string name="task_has_timer">Task has timer</string>
+    <string name="preferences_force_dark_mode">Force dark mode</string>
+    <string name="preferences_application_language">Application language</string>
+    <string name="preferences_template_task_name">Template task name</string>
+    <string name="preferences_default_task_name_summary">This text is automatically entered in the task creation dialog.</string>
 </resources>

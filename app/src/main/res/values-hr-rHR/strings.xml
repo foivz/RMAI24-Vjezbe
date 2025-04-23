@@ -18,4 +18,8 @@
     <string name="news_ws_err_msg">Vijesti trenutno nisu dostupne.\nMolimo, pokušajte kasnije.</string>
     <string name="task_countdown">Odbrojavanje zadatka</string>
     <string name="task_has_timer">Zadatak ima tajmer</string>
+    <string name="preferences_force_dark_mode">Prisili tamni način rada</string>
+    <string name="preferences_application_language">Jezik aplikacije</string>
+    <string name="preferences_template_task_name">Naziv predloška zadatka</string>
+    <string name="preferences_default_task_name_summary">Ovaj se tekst automatski unosi prilikom stvaranja novog zadatka.</string>
 </resources>
