@@ -11,6 +11,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +38,7 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager2
+    lateinit var btnStartGame: Button
 
     lateinit var navDrawerLayout: DrawerLayout
     lateinit var navView: NavigationView
@@ -61,6 +63,12 @@ class MainActivity : AppCompatActivity() {
 
         navDrawerLayout = findViewById(R.id.nav_drawer_layout)
         navView = findViewById(R.id.nav_view)
+
+        btnStartGame = findViewById(R.id.btnStartGame)
+        btnStartGame.setOnClickListener {
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+        }
 
         setupTabNavigation()
         TasksDatabase.buildInstance(this)
