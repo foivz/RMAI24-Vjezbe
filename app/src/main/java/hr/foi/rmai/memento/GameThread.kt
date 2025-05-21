@@ -7,17 +7,26 @@ class GameThread(val surfaceHolder: SurfaceHolder, val gameView: GameView): Thre
     @Volatile
     var gameRunning = true
 
-    val fpsTarget: Long = 60
-    val targetSleep = (1000 / fpsTarget)
+    var fps: Int = 0
+    private var frameStartTime: Long = 0
+    private var frameElapsedTime: Long = 0
 
     override fun run() {
         while (gameRunning) {
             val canvas: Canvas? = surfaceHolder.lockCanvas()
 
             if (canvas != null) {
+                frameStartTime = System.currentTimeMillis()
+                gameView.update(fps)
                 gameView.draw(canvas)
 
                 surfaceHolder.unlockCanvasAndPost(canvas)
+
+                frameElapsedTime = System.currentTimeMillis() - frameStartTime
+
+                if (frameElapsedTime > 1) {
+                    fps = (1000 / frameElapsedTime).toInt()
+                }
             }
         }
     }
