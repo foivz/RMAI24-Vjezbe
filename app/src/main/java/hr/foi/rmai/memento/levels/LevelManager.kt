@@ -20,6 +20,7 @@ class LevelManager(
     var playing = false
     private var currentIndex = 0
     var player: Player
+    var gravity: Float = 6f
 
     init {
         player = Player(0f, 0f)
