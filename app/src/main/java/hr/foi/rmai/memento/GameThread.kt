@@ -1,6 +1,7 @@
 package hr.foi.rmai.memento
 
 import android.graphics.Canvas
+import android.util.Log
 import android.view.SurfaceHolder
 
 class GameThread(val surfaceHolder: SurfaceHolder, val gameView: GameView): Thread() {
