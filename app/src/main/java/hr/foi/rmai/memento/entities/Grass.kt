@@ -8,6 +8,8 @@ class Grass(locationX: Int, locationY: Int, type: Char)
             locationY.toFloat(),
             0
         )
+
+        updateRectHitbox()
     }
 
     override fun update(fps: Int, gravity: Float) {

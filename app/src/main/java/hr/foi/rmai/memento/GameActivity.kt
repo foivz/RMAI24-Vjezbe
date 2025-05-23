@@ -1,5 +1,6 @@
 package hr.foi.rmai.memento
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.SurfaceHolder
 import androidx.activity.enableEdgeToEdge
@@ -42,6 +43,8 @@ class GameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         val windowMetrics: WindowMetrics =
             WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)

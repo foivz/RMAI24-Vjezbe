@@ -85,6 +85,16 @@ class LevelManager(
 
         return bitmaps[index]!!
     }
+
+    fun switchPlayingStatus() {
+        playing = !playing
+
+        if (playing) {
+            gravity = 6f
+        } else {
+            gravity = 0f
+        }
+    }
 }
 
 
