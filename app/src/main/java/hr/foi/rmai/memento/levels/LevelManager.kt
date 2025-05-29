@@ -31,7 +31,7 @@ class LevelManager(
         }
 
         loadMapData(context, pixelsPerMeter, playerX, playerY)
-        playing = true
+        playing = false
     }
 
     private fun loadMapData(
