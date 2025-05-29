@@ -3,15 +3,21 @@ package hr.foi.rmai.memento.entities
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import hr.foi.rmai.memento.utils.RectHitbox
+import hr.foi.rmai.memento.views.Animation
 
 abstract class GameObject(
     val width: Int,
     val height: Int,
-    val animFrameCount: Int,
+    var animFrameCount: Int,
     val bitmapName: String,
     val type: Char
 ) {
+    protected var anim: Animation? = null
+    var animated = false
+    protected var animFps = 1
+
     val rectHitbox = RectHitbox()
     val worldLocation: WorldLocation = WorldLocation(0f, 0f, 0)
     var active = true
@@ -94,6 +100,28 @@ abstract class GameObject(
         rectHitbox.right = worldLocation.x + width
     }
 
+    fun setAnimated(
+        pixelsPerMeter: Int,
+        animated: Boolean
+    ) {
+        this.animated = animated
+        anim = Animation(
+            bitmapName,
+            pixelsPerMeter,
+            width,
+            height,
+            animFrameCount,
+            animFps
+        )
+    }
+
+    fun getRectToDraw(deltaTime: Long): Rect? {
+        return anim?.getCurrentFrame(
+            deltaTime,
+            xVelocity,
+            moves
+        )
+    }
     abstract fun update(fps: Int, gravity: Float)
 }
 

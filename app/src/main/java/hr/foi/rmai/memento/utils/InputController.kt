@@ -122,6 +122,15 @@ class InputController(
     private fun handleDown() {
         handleMovement()
         handlePause()
+        handleShooting()
+    }
+
+    private fun handleShooting() {
+        if (shoot.contains(x, y)) {
+            if (levelManager.player.pullTriger()) {
+                // ništa
+            }
+        }
     }
 }
 

@@ -23,7 +23,7 @@ class LevelManager(
     var gravity: Float = 6f
 
     init {
-        player = Player(0f, 0f)
+        player = Player(0f, 0f, pixelsPerMeter)
         currentLevel = when (level) {
             "TestLevel" -> TestLevel()
             "LevelCave" -> LevelCave()
@@ -53,7 +53,7 @@ class LevelManager(
                     when (c) {
                         '1' -> gameObjects.add(Grass(j, i, c))
                         'p' -> {
-                            player = Player(playerX, playerY)
+                            player = Player(playerX, playerY, pixelsPerMeter)
                             gameObjects.add(player)
                         }
                     }

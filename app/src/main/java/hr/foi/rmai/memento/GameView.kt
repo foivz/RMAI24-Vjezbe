@@ -1,8 +1,10 @@
 package hr.foi.rmai.memento
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
@@ -59,18 +61,31 @@ class GameView(
                         toScreen2d = viewport.worldToScreen(
                             gameObject.worldLocation.x,
                             gameObject.worldLocation.y,
-                            gameObject.width,
-                            gameObject.height
+                            gameObject.width.toFloat(),
+                            gameObject.height.toFloat()
                         )
 
-                        canvas.drawBitmap(
-                            levelManager.getBitmap(gameObject.type),
-                            toScreen2d.left.toFloat(),
-                            toScreen2d.top.toFloat(),
+                        drawGameObject(
+                            canvas,
+                            gameObject,
+                            toScreen2d,
                             paint
                         )
                     }
                 }
+            }
+
+            paint.setColor(Color.argb(255, 255, 255, 255))
+
+            for (i in 0 until levelManager.player.bfg.numBullets) {
+                toScreen2d = viewport.worldToScreen(
+                    levelManager.player.bfg.getBulletX(i),
+                    levelManager.player.bfg.getBulletY(i),
+                    0.25f,
+                    0.05f
+                )
+
+                canvas.drawRect(toScreen2d, paint)
             }
         }
     }
@@ -146,6 +161,82 @@ class GameView(
                     }
                 }
             }
+        }
+    }
+
+    private fun drawWholeBitmap(
+        toScreen2d: Rect,
+        paint: Paint,
+        canvas: Canvas,
+        gameObject: GameObject
+    ) {
+        canvas.drawBitmap(
+            levelManager.getBitmap(gameObject.type),
+            toScreen2d.left.toFloat(),
+            toScreen2d.top.toFloat(),
+            paint
+        )
+    }
+
+    private fun drawAnimatedRegularWay(
+        toScreen2d: Rect,
+        paint: Paint,
+        canvas: Canvas,
+        gameObject: GameObject
+    ) {
+        canvas.drawBitmap(
+            levelManager.getBitmap(gameObject.type),
+            gameObject.getRectToDraw(System.currentTimeMillis()),
+            toScreen2d,
+            paint
+        )
+    }
+
+    private fun drawAnimatedRotated(
+        canvas: Canvas,
+        toScreen2d: Rect,
+        gameObject: GameObject
+    ) {
+        val flipper = Matrix()
+        flipper.preScale(-1f, 1f)
+
+        val r: Rect? = gameObject.getRectToDraw(System.currentTimeMillis())
+        val b: Bitmap
+
+        if (r != null) {
+            b = Bitmap.createBitmap(
+                levelManager.getBitmap(gameObject.type),
+                r.left,
+                r.top,
+                r.width(),
+                r.height(),
+                flipper,
+                true
+            )
+
+            canvas.drawBitmap(
+                b,
+                toScreen2d.left.toFloat(),
+                toScreen2d.top.toFloat(),
+                paint
+            )
+        }
+    }
+
+    private fun drawGameObject(
+        canvas: Canvas,
+        gameObject: GameObject,
+        toScreen2d: Rect,
+        paint: Paint
+    ) {
+        if (gameObject.animated) {
+            if (gameObject.facing == gameObject.RIGHT) {
+                drawAnimatedRotated(canvas, toScreen2d, gameObject)
+            } else {
+                drawAnimatedRegularWay(toScreen2d, paint, canvas, gameObject)
+            }
+        } else {
+            drawWholeBitmap(toScreen2d, paint, canvas, gameObject)
         }
     }
 }

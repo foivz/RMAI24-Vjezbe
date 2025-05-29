@@ -31,8 +31,8 @@ class Viewport(screenWidth: Int, screenHeight: Int) {
     fun worldToScreen(
         objectX: Float,
         objectY: Float,
-        objectWidth: Int,
-        objectHeight: Int
+        objectWidth: Float,
+        objectHeight: Float
     ): Rect {
         val positionRect = Rect()
 

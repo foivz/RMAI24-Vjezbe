@@ -1,9 +1,12 @@
 package hr.foi.rmai.memento.entities
 
+import hr.foi.rmai.memento.utils.MachineGun
 import hr.foi.rmai.memento.utils.RectHitbox
 
-class Player(locationX: Float, locationY: Float)
+class Player(locationX: Float, locationY: Float, val pixelsPerMeter: Int)
     : GameObject(1, 2, 5, "player", 'p') {
+    val bfg = MachineGun()
+
     val MAX_X_VELOCITY = 10f
     var isPressingRight = false
     var isPressingLeft = false
@@ -27,6 +30,10 @@ class Player(locationX: Float, locationY: Float)
         moves = true
         facing = LEFT
         isFalling = false
+
+        animFps = 16
+        animFrameCount = 5
+        setAnimated(pixelsPerMeter, true)
     }
 
     override fun update(fps: Int, gravity: Float) {
@@ -34,6 +41,7 @@ class Player(locationX: Float, locationY: Float)
         checkPlayerDirection()
         handleJumping(gravity)
 
+        bfg.update(fps.toLong())
         move(fps)
 
         val locX = worldLocation.x
@@ -140,6 +148,15 @@ class Player(locationX: Float, locationY: Float)
         rectHitboxRight.left = lx + width * 0.8f
         rectHitboxRight.bottom = ly + height * 0.8f
         rectHitboxRight.right = lx + width * 0.7f
+    }
+
+    fun pullTriger(): Boolean {
+        return bfg.shoot(
+            worldLocation.x,
+            worldLocation.y,
+            facing,
+            height.toFloat()
+        )
     }
 }
 
