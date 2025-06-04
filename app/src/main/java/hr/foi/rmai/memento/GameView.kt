@@ -198,7 +198,7 @@ class GameView(
         gameObject: GameObject
     ) {
         val flipper = Matrix()
-        flipper.preScale(-1f, 1f)
+        flipper.preScale(-1f, 0.75f)
 
         val r: Rect? = gameObject.getRectToDraw(System.currentTimeMillis())
         val b: Bitmap
