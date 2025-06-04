@@ -8,8 +8,8 @@ import hr.foi.rmai.memento.utils.RectHitbox
 import hr.foi.rmai.memento.views.Animation
 
 abstract class GameObject(
-    val width: Int,
-    val height: Int,
+    val width: Float,
+    val height: Float,
     var animFrameCount: Int,
     val bitmapName: String,
     val type: Char
@@ -85,8 +85,8 @@ abstract class GameObject(
         )
         bitmap = Bitmap.createScaledBitmap(
             bitmap,
-            (width * animFrameCount * pixelsPerMeter),
-            (height * pixelsPerMeter),
+            (width * animFrameCount * pixelsPerMeter).toInt(),
+            (height * pixelsPerMeter).toInt(),
             false
         )
 
@@ -108,8 +108,8 @@ abstract class GameObject(
         anim = Animation(
             bitmapName,
             pixelsPerMeter,
-            width,
-            height,
+            width.toInt(),
+            height.toInt(),
             animFrameCount,
             animFps
         )

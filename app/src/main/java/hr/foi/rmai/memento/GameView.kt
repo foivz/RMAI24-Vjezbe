@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.SurfaceView
 import hr.foi.rmai.memento.entities.GameObject
 import hr.foi.rmai.memento.levels.LevelManager
 import hr.foi.rmai.memento.utils.InputController
+import hr.foi.rmai.memento.utils.PlayerState
 import hr.foi.rmai.memento.views.Viewport
 
 class GameView(
@@ -21,6 +23,7 @@ class GameView(
     private val width: Int,
     private val height: Int
 ): SurfaceView(context) {
+    private val playerState: PlayerState
     private val paint = Paint()
     private val viewport: Viewport
     private lateinit var levelManager: LevelManager
@@ -28,6 +31,7 @@ class GameView(
 
     init {
         viewport = Viewport(width, height)
+        playerState = PlayerState()
 
         loadLevel("TestLevel", 16f, 0.25f)
     }
@@ -92,10 +96,6 @@ class GameView(
 
     fun update(fps: Int) {
         for (gameObject: GameObject in levelManager.gameObjects) {
-            if (gameObject.bitmapName == "player") {
-                Log.i("aaaaa", gameObject.worldLocation.x.toString())
-                Log.i("aaaaa", gameObject.worldLocation.y.toString())
-            }
             if (gameObject.active) {
                 if (!viewport.clipObjects(
                     gameObject.worldLocation.x,
@@ -134,6 +134,9 @@ class GameView(
 
         inputController = InputController(width, height, levelManager)
 
+        val location = PointF(playerX, playerY)
+        playerState.saveLocation(location)
+
         viewport.setWorldCenter(
             levelManager.player.worldLocation.x,
             levelManager.player.worldLocation.y
@@ -151,6 +154,8 @@ class GameView(
             levelManager.player.checkCollisions(gameObject.rectHitbox)
         if (hit > 0) {
             when (gameObject.type) {
+                'c' -> handleCoinPickup(gameObject, hit)
+                'e' -> handleExtraLife(gameObject, hit)
                 else -> {
                     if (hit == 1) {
                         levelManager.player.xVelocity = 0f
@@ -238,6 +243,25 @@ class GameView(
         } else {
             drawWholeBitmap(toScreen2d, paint, canvas, gameObject)
         }
+    }
+
+    private fun handlePickup(gameObject: GameObject, hit: Int) {
+        gameObject.active = false
+        gameObject.visible = false
+
+        if (hit != 2) {
+            levelManager.player.restorePreviousVelocity()
+        }
+    }
+
+    private fun handleExtraLife(gameObject: GameObject, hit: Int) {
+        handlePickup(gameObject, hit)
+        playerState.addLife()
+    }
+
+    private fun handleCoinPickup(gameObject: GameObject, hit: Int) {
+        handlePickup(gameObject, hit)
+        playerState.gotCredit()
     }
 }
 

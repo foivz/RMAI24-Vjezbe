@@ -2,6 +2,8 @@ package hr.foi.rmai.memento.levels
 
 import android.content.Context
 import android.graphics.Bitmap
+import hr.foi.rmai.memento.entities.Coin
+import hr.foi.rmai.memento.entities.ExtraLife
 import hr.foi.rmai.memento.entities.GameObject
 import hr.foi.rmai.memento.entities.Grass
 import hr.foi.rmai.memento.entities.Player
@@ -56,6 +58,8 @@ class LevelManager(
                             player = Player(playerX, playerY, pixelsPerMeter)
                             gameObjects.add(player)
                         }
+                        'c' -> gameObjects.add(Coin(j, i, c))
+                        'e' -> gameObjects.add(ExtraLife(j, i, c))
                     }
 
                     if (bitmaps[getBitmapIndex(c)] == null) {
@@ -76,6 +80,8 @@ class LevelManager(
         return when (blockType) {
             '1' -> 1
             'p' -> 2
+            'c' -> 3
+            'e' -> 4
             else -> 0
         }
     }

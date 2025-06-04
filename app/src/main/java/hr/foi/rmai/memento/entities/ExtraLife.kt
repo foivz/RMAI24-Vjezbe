@@ -1,14 +1,14 @@
 package hr.foi.rmai.memento.entities
 
-class Grass(locationX: Int, locationY: Int, type: Char)
-    : GameObject(1f, 1f, 1, "turf", type) {
+class ExtraLife(worldStartX: Int, worldStartY: Int, type: Char)
+    : GameObject(0.8f, 0.65f, 1, "life", 'e'){
+
     init {
         setWorldLocation(
-            locationX.toFloat(),
-            locationY.toFloat(),
+            worldStartX.toFloat(),
+            worldStartY.toFloat(),
             0
         )
-
         updateRectHitbox()
     }
 

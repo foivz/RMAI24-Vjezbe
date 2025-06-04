@@ -18,8 +18,8 @@ class Viewport(screenWidth: Int, screenHeight: Int) {
         screenCenterX = screenWidth / 2
         screenCenterY = screenHeight / 2
 
-        pixelsPerMeterX = screenWidth / 20
-        pixelsPerMeterY = screenHeight / 12
+        pixelsPerMeterX = screenWidth / 20  // 32
+        pixelsPerMeterY = screenHeight / 12 // 24
 
         metersToShowX = 25
         metersToShowY = 15

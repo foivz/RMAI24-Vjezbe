@@ -4,7 +4,7 @@ import hr.foi.rmai.memento.utils.MachineGun
 import hr.foi.rmai.memento.utils.RectHitbox
 
 class Player(locationX: Float, locationY: Float, val pixelsPerMeter: Int)
-    : GameObject(1, 2, 5, "player", 'p') {
+    : GameObject(1f, 2f, 5, "player", 'p') {
     val bfg = MachineGun()
 
     val MAX_X_VELOCITY = 10f
@@ -157,6 +157,18 @@ class Player(locationX: Float, locationY: Float, val pixelsPerMeter: Int)
             facing,
             height.toFloat()
         )
+    }
+
+    fun restorePreviousVelocity() {
+        if (!isJumping && !isFalling) {
+            if (facing == LEFT) {
+                isPressingLeft = true
+                xVelocity = -MAX_X_VELOCITY
+            } else {
+                isPressingRight = true
+                xVelocity = MAX_X_VELOCITY
+            }
+        }
     }
 }
 
