@@ -123,9 +123,9 @@ class Player(locationX: Float, locationY: Float, val pixelsPerMeter: Int)
     }
 
     private fun updateFeetHitbox(lx: Float, ly: Float) {
-        rectHitboxFeet.top = ly + height * 0.95f
+        rectHitboxFeet.top = ly + height
         rectHitboxFeet.left = lx + width * 0.2f
-        rectHitboxFeet.bottom = ly + height * 0.98f
+        rectHitboxFeet.bottom = ly + height
         rectHitboxFeet.right = lx + width * 0.8f
     }
 
