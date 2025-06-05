@@ -129,7 +129,8 @@ class GameView(
             context,
             viewport.pixelsPerMeterX,
             playerX,
-            playerY
+            playerY,
+            width
         )
 
         inputController = InputController(width, height, levelManager)

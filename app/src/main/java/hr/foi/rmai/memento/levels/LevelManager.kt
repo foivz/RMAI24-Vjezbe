@@ -13,7 +13,8 @@ class LevelManager(
     context: Context,
     pixelsPerMeter: Int,
     playerX: Float,
-    playerY: Float
+    playerY: Float,
+    screenWidth: Int
 ) {
     val gameObjects: ArrayList<GameObject> = ArrayList()
     val bitmaps: Array<Bitmap?> = arrayOfNulls(20)
