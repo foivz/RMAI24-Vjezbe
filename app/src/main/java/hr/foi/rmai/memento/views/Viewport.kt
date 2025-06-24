@@ -4,8 +4,8 @@ import android.graphics.Rect
 import hr.foi.rmai.memento.entities.WorldLocation
 
 class Viewport(screenWidth: Int, screenHeight: Int) {
-    private var screenCenterX: Int
-    private var screenCenterY: Int
+    var screenCenterX: Int
+    var screenCenterY: Int
     var pixelsPerMeterX: Int
     var pixelsPerMeterY: Int
     private var metersToShowX: Int
@@ -88,6 +88,10 @@ class Viewport(screenWidth: Int, screenHeight: Int) {
     fun setWorldCenter(x: Float, y: Float) {
         currentWorldCenter.x = x
         currentWorldCenter.y = y
+    }
+
+    fun getViewportWorldCenterY(): Float {
+        return currentWorldCenter.y
     }
 }
 

@@ -12,10 +12,12 @@ import android.graphics.RectF
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
+import hr.foi.rmai.memento.entities.Drone
 import hr.foi.rmai.memento.entities.GameObject
 import hr.foi.rmai.memento.levels.LevelManager
 import hr.foi.rmai.memento.utils.InputController
 import hr.foi.rmai.memento.utils.PlayerState
+import hr.foi.rmai.memento.utils.RectHitbox
 import hr.foi.rmai.memento.views.Viewport
 
 class GameView(
@@ -41,6 +43,7 @@ class GameView(
 
         if (holder.surface.isValid) {
             canvas.drawColor(Color.argb(255, 0, 0, 200))
+            drawBackgrounds(canvas, 0, -3)
 
             paint.setColor(Color.argb(80, 255, 255, 255))
             val buttonsToDraw = inputController.getButtons()
@@ -107,8 +110,15 @@ class GameView(
 
                     checkCollisionWithPlayer(gameObject)
                 }
+                checkBulletCollision(gameObject)
+
                 if (levelManager.playing) {
                     gameObject.update(fps, levelManager.gravity)
+
+                    if (gameObject.type == 'd') {
+                        val d = gameObject as Drone
+                        d.setWaypoint(levelManager.player.worldLocation)
+                    }
                 }
             } else {
                 gameObject.visible = false
@@ -157,6 +167,8 @@ class GameView(
             when (gameObject.type) {
                 'c' -> handleCoinPickup(gameObject, hit)
                 'e' -> handleExtraLife(gameObject, hit)
+                'd' -> handleEnemy()
+                'g' -> handleEnemy()
                 else -> {
                     if (hit == 1) {
                         levelManager.player.xVelocity = 0f
@@ -263,6 +275,140 @@ class GameView(
     private fun handleCoinPickup(gameObject: GameObject, hit: Int) {
         handlePickup(gameObject, hit)
         playerState.gotCredit()
+    }
+
+    private fun handleEnemy() {
+        playerState.loseLife()
+
+        var location = PointF(
+            playerState.loadLocation().x,
+            playerState.loadLocation().y
+        )
+        levelManager.player.setWorldLocation(
+            location.x,
+            location.y,
+            0
+        )
+        levelManager.player.xVelocity = 0f
+    }
+
+    private fun checkBulletCollision(gameObject: GameObject) {
+        for (i in 0 until levelManager.player.bfg.numBullets) {
+            var r = RectHitbox()
+            r.left = levelManager.player.bfg.getBulletX(i)
+            r.right = levelManager.player.bfg.getBulletX(i) + 0.1f
+            r.top = levelManager.player.bfg.getBulletY(i)
+            r.bottom= levelManager.player.bfg.getBulletY(i) + 0.1f
+
+            if (gameObject.rectHitbox.intersects(r)) {
+                levelManager.player.bfg.hideBullet(i)
+
+                if (gameObject.type == 'g') {
+                    gameObject.setWorldLocation(
+                        gameObject.worldLocation.x +
+                        2 * levelManager.player.bfg.getDirection(i),
+                        gameObject.worldLocation.y,
+                        gameObject.worldLocation.z
+                    )
+                } else if (gameObject.type == 'd') {
+                    gameObject.setWorldLocation(-100f, -100f, 0)
+                }
+            }
+        }
+    }
+
+    private fun drawBackgrounds(
+        canvas: Canvas,
+        start: Int,
+        stop: Int
+    ) {
+        var fromRect1: Rect
+        var fromRect2: Rect
+        var toRect1: Rect
+        var toRect2: Rect
+
+        levelManager.backgrounds.forEach { bg ->
+            if (bg.z < start && bg.z > stop) {
+                if (!viewport.clipObjects(
+                    -1f,
+                    bg.y,
+                    1000f,
+                    bg.height.toFloat()
+                )) {
+                    val startY = viewport.screenCenterY -
+                        (viewport.getViewportWorldCenterY() - bg.y) *
+                        viewport.pixelsPerMeterY
+
+                    val endY = viewport.screenCenterY -
+                            (viewport.getViewportWorldCenterY() - bg.endY) *
+                            viewport.pixelsPerMeterY
+
+                    fromRect1 = Rect(
+                        0,
+                        0,
+                        bg.width - bg.xClip,
+                        bg.height
+                    )
+                    toRect1 = Rect(
+                        bg.xClip,
+                        startY.toInt(),
+                        bg.width,
+                        endY.toInt()
+                    )
+                    fromRect2 = Rect(
+                        bg.width - bg.xClip,
+                        0,
+                        bg.width,
+                        bg.height
+                    )
+                    toRect2 = Rect(
+                        0,
+                        startY.toInt(),
+                        bg.xClip,
+                        endY.toInt()
+                    )
+
+                    if (!bg.reversedFirst) {
+                        canvas.drawBitmap(
+                            bg.bitmap,
+                            fromRect1,
+                            toRect1,
+                            paint
+                        )
+                        canvas.drawBitmap(
+                            bg.bitmapReversed,
+                            fromRect2,
+                            toRect2,
+                            paint
+                        )
+                    } else {
+                        canvas.drawBitmap(
+                            bg.bitmap,
+                            fromRect2,
+                            toRect2,
+                            paint
+                        )
+                        canvas.drawBitmap(
+                            bg.bitmapReversed,
+                            fromRect1,
+                            toRect1,
+                            paint
+                        )
+
+                        bg.xClip -=
+                            (levelManager.player.xVelocity / (20 / bg.speed)).toInt()
+
+                        if (bg.xClip >= bg.width) {
+                            bg.xClip = 0
+                            bg.reversedFirst = !bg.reversedFirst
+                        } else if (bg.xClip <= 0) {
+                            bg.xClip = bg.width
+                            bg.reversedFirst = !bg.reversedFirst
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

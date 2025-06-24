@@ -14,6 +14,7 @@ abstract class GameObject(
     val bitmapName: String,
     val type: Char
 ) {
+    var traversable: Boolean = false
     protected var anim: Animation? = null
     var animated = false
     protected var animFps = 1

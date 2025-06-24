@@ -43,6 +43,14 @@ class Drone(worldStartX: Int, worldStartY: Int)
         move(fps)
         updateRectHitbox()
     }
+
+    fun setWaypoint(playerLocation: WorldLocation) {
+        if (System.currentTimeMillis() > lastWaypointSetTime + 2000) {
+            lastWaypointSetTime = System.currentTimeMillis()
+            currentWaypoint.x = playerLocation.x
+            currentWaypoint.y = playerLocation.y
+        }
+    }
 }
 
 
