@@ -62,4 +62,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+
+    implementation("com.braintreepayments.api:drop-in:6.17.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
 }
