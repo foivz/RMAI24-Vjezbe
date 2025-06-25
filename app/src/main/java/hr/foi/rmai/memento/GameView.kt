@@ -14,18 +14,22 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import hr.foi.rmai.memento.entities.Drone
 import hr.foi.rmai.memento.entities.GameObject
+import hr.foi.rmai.memento.entities.Perk
 import hr.foi.rmai.memento.levels.LevelManager
 import hr.foi.rmai.memento.utils.InputController
 import hr.foi.rmai.memento.utils.PlayerState
 import hr.foi.rmai.memento.utils.RectHitbox
 import hr.foi.rmai.memento.views.Viewport
+import hr.foi.rmai.memento.ws.NetworkService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class GameView(
     context: Context,
     private val width: Int,
     private val height: Int
 ): SurfaceView(context) {
-    private val playerState: PlayerState
     private val paint = Paint()
     private val viewport: Viewport
     private lateinit var levelManager: LevelManager
@@ -33,9 +37,9 @@ class GameView(
 
     init {
         viewport = Viewport(width, height)
-        playerState = PlayerState()
 
         loadLevel("TestLevel", 16f, 0.25f)
+        getUnlocks("Lovro")
     }
 
     override fun draw(canvas: Canvas) {
@@ -146,7 +150,7 @@ class GameView(
         inputController = InputController(width, height, levelManager)
 
         val location = PointF(playerX, playerY)
-        playerState.saveLocation(location)
+        PlayerState.saveLocation(location)
 
         viewport.setWorldCenter(
             levelManager.player.worldLocation.x,
@@ -269,20 +273,20 @@ class GameView(
 
     private fun handleExtraLife(gameObject: GameObject, hit: Int) {
         handlePickup(gameObject, hit)
-        playerState.addLife()
+        PlayerState.addLife()
     }
 
     private fun handleCoinPickup(gameObject: GameObject, hit: Int) {
         handlePickup(gameObject, hit)
-        playerState.gotCredit()
+        PlayerState.gotCredit()
     }
 
     private fun handleEnemy() {
-        playerState.loseLife()
+        PlayerState.loseLife()
 
         var location = PointF(
-            playerState.loadLocation().x,
-            playerState.loadLocation().y
+            PlayerState.loadLocation().x,
+            PlayerState.loadLocation().y
         )
         levelManager.player.setWorldLocation(
             location.x,
@@ -409,6 +413,23 @@ class GameView(
                 }
             }
         }
+    }
+
+    private fun getUnlocks(username: String) {
+        val call: Call<List<Perk>> =
+            NetworkService.unlocksService.getUnlocksForUser(username)
+
+        call.enqueue(object : Callback<List<Perk>> {
+            override fun onResponse(call: Call<List<Perk>>,
+                                    response: Response<List<Perk>>) {
+                response.body()?.let { perks ->
+                    PlayerState.setPerkList(perks)
+                }
+            }
+            override fun onFailure(call: Call<List<Perk>>, t: Throwable) {
+                Log.e("Unlocks", "Request failed: " + t.message)
+            }
+        })
     }
 }
 

@@ -10,7 +10,9 @@ import hr.foi.rmai.memento.entities.ExtraLife
 import hr.foi.rmai.memento.entities.GameObject
 import hr.foi.rmai.memento.entities.Grass
 import hr.foi.rmai.memento.entities.Guard
+import hr.foi.rmai.memento.entities.MachineGunUpgrade
 import hr.foi.rmai.memento.entities.Player
+import hr.foi.rmai.memento.utils.PlayerState
 
 class LevelManager(
     level: String,
@@ -74,6 +76,11 @@ class LevelManager(
                         'e' -> gameObjects.add(ExtraLife(j, i, c))
                         'd' -> gameObjects.add(Drone(j, i))
                         'g' -> gameObjects.add(Guard(j, i, pixelsPerMeter))
+                        'u' -> {
+                            if (PlayerState.hasRateOfFireUpgrade()) {
+                                gameObjects.add(MachineGunUpgrade(j, i))
+                            }
+                        }
                     }
 
                     if (bitmaps[getBitmapIndex(c)] == null) {
@@ -98,6 +105,9 @@ class LevelManager(
             'e' -> 4
             'd' -> 5
             'g' -> 6
+            'z' -> 20
+            'f' -> 21
+            'u' -> 22
             else -> 0
         }
     }

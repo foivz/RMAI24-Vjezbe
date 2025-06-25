@@ -1,13 +1,15 @@
 package hr.foi.rmai.memento.utils
 
 import android.graphics.PointF
+import hr.foi.rmai.memento.entities.Perk
 
-class PlayerState {
+object PlayerState {
     private var numCredits = 0
     private var mgFireRate = 0
     private var lives = 0
     private var restartX = 0f
     private var restartY = 0f
+    private var perkList: List<Perk> = mutableListOf()
 
     init {
         lives = 3
@@ -50,6 +52,14 @@ class PlayerState {
 
     fun loadLocation(): PointF {
         return PointF(restartX, restartY)
+    }
+
+    fun setPerkList(perks: List<Perk>) {
+        this.perkList = perks
+    }
+
+    fun hasRateOfFireUpgrade(): Boolean {
+        return this.perkList.find { p -> p.perk == "e"} != null
     }
 }
 
