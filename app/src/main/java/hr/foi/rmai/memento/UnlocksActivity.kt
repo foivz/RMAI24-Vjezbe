@@ -1,11 +1,8 @@
 package hr.foi.rmai.memento
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.braintreepayments.api.DropInClient
@@ -13,18 +10,15 @@ import com.braintreepayments.api.DropInListener
 import com.braintreepayments.api.DropInRequest
 import com.braintreepayments.api.DropInResult
 import hr.foi.rmai.memento.adapters.ShopAdapter
-import hr.foi.rmai.memento.adapters.TasksAdapter
 import hr.foi.rmai.memento.entities.ShopItem
 import hr.foi.rmai.memento.ws.BraintreeReponse
 import hr.foi.rmai.memento.ws.NetworkService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 class UnlocksActivity : AppCompatActivity(),  DropInListener {
     private lateinit var dropInClient: DropInClient
-    private lateinit var btnStartPayment: Button
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
