@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager2
     lateinit var btnStartGame: Button
+    lateinit var btnOpenShop: Button
 
     lateinit var navDrawerLayout: DrawerLayout
     lateinit var navView: NavigationView
@@ -67,6 +68,12 @@ class MainActivity : AppCompatActivity() {
         btnStartGame = findViewById(R.id.btnStartGame)
         btnStartGame.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnOpenShop = findViewById(R.id.btnOpenShop)
+        btnOpenShop.setOnClickListener {
+            val intent = Intent(this, UnlocksActivity::class.java)
             startActivity(intent)
         }
 
