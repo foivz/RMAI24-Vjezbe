@@ -1,10 +1,12 @@
 package hr.foi.rmai.memento
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.braintreepayments.api.DropInClient
 import com.braintreepayments.api.DropInListener
@@ -31,15 +33,18 @@ class UnlocksActivity : AppCompatActivity(),  DropInListener {
 
         dropInClient = DropInClient(this, "sandbox_ktvbjfdk_yfbkxdhy43f43ht5")
         dropInClient.setListener(this)
-        btnStartPayment = findViewById(R.id.btnStartPayment)
         recyclerView = findViewById(R.id.rv_shop_items)
-        btnStartPayment.setOnClickListener {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val items = listOf<ShopItem>(
+            ShopItem(1, "Faster shooting", "Machine gun upgrade that lets the player shoot faster."),
+            ShopItem(2, "Double jump", "Allows player to jump one more when he is already in the air."),
+        )
+        recyclerView.adapter = ShopAdapter(items.toMutableList()) {
             val request = DropInRequest(false)
             request.maskCardNumber = true
             dropInClient.launchDropIn(request)
         }
-
-        loadShopList()
     }
 
     override fun onDropInSuccess(dropInResult: DropInResult) {
@@ -57,13 +62,5 @@ class UnlocksActivity : AppCompatActivity(),  DropInListener {
 
     override fun onDropInFailure(error: Exception) {
         Toast.makeText(this, error.message ?: error.toString(), Toast.LENGTH_LONG).show()
-    }
-
-    private fun loadShopList() {
-        val items = listOf<ShopItem>(
-            ShopItem(1, "Faster shooting", "Machine gun upgrade that lets the player shoot faster."),
-            ShopItem(2, "Double jump", "Allows player to jump one more when he is already in the air."),
-        )
-        recyclerView.adapter = ShopAdapter(items.toMutableList())
     }
 }
